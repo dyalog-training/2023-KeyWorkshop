@@ -1,0 +1,13 @@
+site_name: Key Workshop 2023
+site_description: Exercises on the use of the key operator
+docs_dir: docs/
+theme:
+  name: material
+  favicon: 'img/favicon.png'
+  logo: 'img/dyalog-white.svg'
+  plugins:
+    - mkdocs-jupyter
+extra_css: 
+  - style.css
+
+ 
