@@ -14740,6 +14740,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <li>Numeric "codes" e.g. US zip codes</li>
 <li>Telephone numbers</li>
 <li>Hexadecimal <code>12E056</code></li>
+<li>Numbers in a text "description" field</li>
+<li>When using comma <code>,</code> as a decimal separator e.g. <code>3,14 ←→ 3.14</code> </li>
 </ul>
 <p>Safer to use full description.<br>
 <code>⎕CSV path ⍬ (2 1 1 1 2 1)</code></p>
@@ -14799,26 +14801,25 @@ col_spec,← 2         2    1      1       1          1</code></pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="nv">tn</span><span class="kd">←</span><span class="s1">&#39;order_data.csv&#39;</span><span class="w"> </span><span class="nf">⎕ntie</span><span class="w"> </span><span class="m">0</span>
-<span class="p">(</span><span class="nv">_</span><span class="w"> </span><span class="nv">header</span><span class="p">)</span><span class="kd">←</span><span class="nf">⎕CSV</span><span class="w"> </span><span class="nf">⎕OPT</span><span class="s1">&#39;Records&#39;</span><span class="w"> </span><span class="m">1</span><span class="o">⊢</span><span class="nv">tn</span><span class="w"> </span><span class="no">⍬</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span>
-<span class="nv">col_types</span><span class="w"> </span><span class="kd">←</span><span class="w"> </span><span class="p">((</span><span class="o">⊢</span><span class="na">/</span><span class="nv">col_spec</span><span class="p">)</span><span class="o">,</span><span class="m">1</span><span class="p">)</span><span class="sr">[</span><span class="p">(</span><span class="o">⊣</span><span class="na">/</span><span class="nv">col_spec</span><span class="p">)</span><span class="o">⍳</span><span class="nv">header</span><span class="sr">]</span><span class="w">   </span><span class="c1">⍝ Mapping between actual column order and column type specification</span>
-<span class="nv">data</span><span class="kd">←</span><span class="nf">⎕CSV</span><span class="w"> </span><span class="nv">tn</span><span class="w"> </span><span class="no">⍬</span><span class="w"> </span><span class="nv">col_types</span>
-<span class="nf">⎕nuntie</span><span class="w"> </span><span class="nv">tn</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 
-     </div>
-</div>
-</div>
-</div>
+<pre><code>∇ (data cols)←col_spec ReadOrderData path;tn;types
+  tn←path ⎕NTIE 0
+  cols←⊃⌽(⎕CSV ⎕OPT'Records' 1)tn ⍬ 1 1
+  types←(col_spec[;2],1)[col_spec[;1]⍳cols]
+  data←⎕CSV tn ⍬ types
+  ⎕NUNTIE tn                                  
+∇</code></pre>
 
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -14849,77 +14850,55 @@ col_spec,← 2         2    1      1       1          1</code></pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="nv">Timestamp2TS</span><span class="kd">←</span><span class="kt">{</span><span class="o">⊃</span><span class="na">⍣</span><span class="p">(</span><span class="m">1</span><span class="o">=≡</span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊢</span><span class="m">2</span><span class="o">⊃</span><span class="na">¨</span><span class="s1">&#39;- :&#39;</span><span class="na">∘</span><span class="nf">⎕VFI</span><span class="na">¨</span><span class="o">⊆</span><span class="bp">⍵</span><span class="kt">}</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 
-     </div>
-</div>
-</div>
-</div>
+<pre><code> Timestamp2TS←{
+     ⊃⍣(1=≡⍵)⊢2⊃¨': -'∘⎕VFI¨⊆⍵                  ⍝ ⎕VFI
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
+     (⊃,/)⍣(1=≡⍵)↓⎕CSV((,¨'- :')⎕R','⊆⍵)'N' 2   ⍝ ⎕CSV
+
+     r←(⍎¨∊∘⎕D⊆⊢)¨⊆⍵ ⋄ (1+1=≡⍵)⊃r(⊃r)           ⍝ ⍎¨
+
+     ⍎¨'\d+'⎕S'&amp;'⊢⍵                             ⍝ ⎕S
+ }</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="p">(</span><span class="nv">data</span><span class="w"> </span><span class="nv">cols</span><span class="p">)</span><span class="kd">←</span><span class="nf">⎕CSV</span><span class="w"> </span><span class="s1">&#39;order_data.csv&#39;</span><span class="w"> </span><span class="no">⍬</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1</span>
-<span class="o">⍴</span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="o">⊃</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-<span class="o">⍴</span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="m">5</span><span class="o">↑</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>This version was suggested as "barbaric". Note that the use of execute <code>⍎⍵</code> above is "safer" because we explicitly <em>include</em> digits (<code>∊∘⎕D</code>) rather than <em>exclude</em> non-digits (<code>~∊∘'- :'</code>).</p>
 
-     </div>
-</div>
-</div>
-</div>
+<pre><code>{⍎¨'- :'((~∊⍨)⊆⊢)⍵}'2042-05-23 13:24:44'</code></pre>
+<p>Note also that <code>⎕VFI</code> will recognise any valid APL numeric literal:</p>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="kt">{</span><span class="o">⊃</span><span class="na">⍣</span><span class="p">(</span><span class="m">1</span><span class="o">=≡</span><span class="bp">⍵</span><span class="p">)(</span><span class="o">⍎</span><span class="na">¨</span><span class="o">∊</span><span class="na">∘</span><span class="nf">⎕D</span><span class="o">⊆⊢</span><span class="p">)</span><span class="na">¨</span><span class="o">⊆</span><span class="bp">⍵</span><span class="kt">}</span><span class="w"> </span><span class="o">⊃</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-<span class="kt">{</span><span class="m">1</span><span class="o">=≡</span><span class="bp">⍵:</span><span class="o">⍎</span><span class="na">¨</span><span class="p">(</span><span class="bp">⍵</span><span class="o">∊</span><span class="nf">⎕D</span><span class="p">)</span><span class="o">⊆</span><span class="bp">⍵</span><span class="w"> </span><span class="p">⋄</span><span class="w"> </span><span class="bp">∇</span><span class="na">¨</span><span class="bp">⍵</span><span class="kt">}</span><span class="w"> </span><span class="m">3</span><span class="o">↑</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-<span class="c1">⍝ Possible future extension?</span>
-<span class="c1">⍝ (⍎¨∊∘⎕D⊆⊢)⍥1</span>
-</pre></div>
+<pre><code>      ⎕VFI'3,14 3.14 3e14 3j14 ¯3 -3'
+┌───────────┬─────────────────────┐
+│0 1 1 1 1 0│0 3.14 3E14 3J14 ¯3 0│
+└───────────┴─────────────────────┘</code></pre>
+<p>Whereas <code>⎕CSV</code> can convert hyphen-number negatives but not APL high minus or complex numbers:</p>
 
-     </div>
-</div>
-</div>
-</div>
+<pre><code>      {(⍬∘≡¨0⍴¨⊃¨⍵)(⍵)}(⎕CSV ⎕OPT'Separator' ' ')'3,14 3.14 3E-14 3j14 ¯3 -3' 'S' 4
+┌───────────┬────────────────────────────┐
+│0 1 1 0 0 1│┌────┬────┬─────┬────┬──┬──┐│
+│           ││3,14│3.14│3E¯14│3j14│¯3│¯3││
+│           │└────┴────┴─────┴────┴──┴──┘│
+└───────────┴────────────────────────────┘</code></pre>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="nv">Timestamp2TS</span><span class="kd">←</span><span class="kt">{</span><span class="o">↓</span><span class="nf">⎕CSV</span><span class="p">((</span><span class="o">,</span><span class="na">¨</span><span class="s1">&#39;- :&#39;</span><span class="p">)</span><span class="nf">⎕R</span><span class="s1">&#39;,&#39;</span><span class="o">⊆</span><span class="bp">⍵</span><span class="p">)</span><span class="s1">&#39;N&#39;</span><span class="m">4</span><span class="kt">}</span>
-<span class="o">⍴</span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="o">⊃</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-<span class="o">⍴</span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="m">5</span><span class="o">↑</span><span class="nv">data</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span>
-</pre></div>
-
-     </div>
 </div>
 </div>
 </div>
-
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -14935,58 +14914,29 @@ c) (1+80=⎕DR ⍵)⊃⍵(⊂⍵)</code></pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="kt">{</span><span class="o">,</span><span class="na">⍤</span><span class="o">⊂</span><span class="na">⍣</span><span class="p">(</span><span class="m">1</span><span class="o">≥|≡</span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊢</span><span class="bp">⍵</span><span class="kt">}</span><span class="s1">&#39;SP&#39;</span><span class="w"> </span><span class="s1">&#39;GT&#39;</span>
-<span class="kt">{</span><span class="o">,</span><span class="na">⍤</span><span class="o">⊂</span><span class="na">⍣</span><span class="p">(</span><span class="m">1</span><span class="o">=≡,</span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊢</span><span class="bp">⍵</span><span class="kt">}</span><span class="s1">&#39;SP&#39;</span>
-<span class="kt">{</span><span class="p">(</span><span class="m">1</span><span class="o">+</span><span class="m">1</span><span class="o">=≡,</span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊃</span><span class="bp">⍵</span><span class="p">(</span><span class="o">,⊂</span><span class="bp">⍵</span><span class="p">)</span><span class="kt">}</span><span class="s1">&#39;SP&#39;</span>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>These are expressions for "enclose-if-simple" <strong>on vectors</strong>. Enclose argument <code>⍵</code> if it is not nested.</p>
+<p><strong>a</strong> is equivalent to <code>⊆⍵</code></p>
+<p><strong>b</strong> only works if <code>(⊢≡∪)≢¨⍵</code></p>
 
-<span class="kt">{</span><span class="o">⊂</span><span class="na">⍣</span><span class="p">(</span><span class="m">1</span><span class="o">=≡</span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊢</span><span class="bp">⍵</span><span class="kt">}</span><span class="s1">&#39;S&#39;</span>
-</pre></div>
+<pre><code>      ↓↑'SP' 'RDJ' 'BR'
+┌───┬───┬───┐
+│SP │RDJ│BR │
+└───┴───┴───┘</code></pre>
+<p><strong>c</strong> will not work for some Unicode characters (<code>⎕DR 160</code>)</p>
 
-     </div>
-</div>
-</div>
-</div>
+<pre><code>      {(1+80=⎕DR ⍵)⊃⍵(⊂⍵)} 'İstanbul'
+İstanbul</code></pre>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="o">↓↑</span><span class="s1">&#39;SP&#39;</span><span class="w"> </span><span class="s1">&#39;RDJ&#39;</span><span class="w"> </span><span class="s1">&#39;BR&#39;</span>
-</pre></div>
-
-     </div>
 </div>
 </div>
 </div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs   celltag_remove_cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-APL"><pre><span></span><span class="kt">{</span><span class="p">(</span><span class="m">1</span><span class="o">+</span><span class="m">80</span><span class="o">=</span><span class="nf">⎕DR</span><span class="w"> </span><span class="bp">⍵</span><span class="p">)</span><span class="o">⊃</span><span class="bp">⍵</span><span class="p">(</span><span class="o">⊂</span><span class="bp">⍵</span><span class="p">)</span><span class="kt">}</span><span class="w"> </span><span class="s1">&#39;İstanbul&#39;</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -15166,7 +15116,14 @@ This code is problematic. What issues can you spot?</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput  celltag_remove_cell" data-mime-type="text/markdown">
 
-<pre><code>]runtime -c "s ∊ 'SP' 'BA'" "InStates'SP' 'BA'" "sid∊(s⍳'SP' 'BA')" "{(≢⍵)≥sm⍳⍨↑⍵}'SP' 'BA'"</code></pre>
+<pre><code>      states←data[;header⍳⊂'state']
+      us←∪states
+      sid←us⍳states
+
+      ]runtime -c "sid∊us⍳'SP' 'TV' 'KD' 'RJ'" "states∊'SP' 'TV' 'KD' 'RJ'"
+
+  sid∊us⍳'SP' 'TV' 'KD' 'RJ' → 3.7E¯5 |      0%                                          
+  states∊'SP' 'TV' 'KD' 'RJ' → 6.3E¯3 | +16815% ⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕⎕</code></pre>
 
 </div>
 </div>
