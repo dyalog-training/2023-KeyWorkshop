@@ -14923,13 +14923,13 @@ c) (1+80=⎕DR ⍵)⊃⍵(⊂⍵)</code></pre>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>These are expressions for "enclose-if-simple" <strong>on vectors</strong>. Enclose argument <code>⍵</code> if it is not nested.</p>
 <p><strong>a</strong> is equivalent to <code>⊆⍵</code></p>
-<p><strong>b</strong> only works if <code>(⊢≡∪)≢¨⍵</code></p>
+<p><strong>b</strong> adds spaces to shorter elements of <code>⍵</code></p>
 
 <pre><code>      ↓↑'SP' 'RDJ' 'BR'
 ┌───┬───┬───┐
 │SP │RDJ│BR │
 └───┴───┴───┘</code></pre>
-<p><strong>c</strong> will not work for some Unicode characters (<code>⎕DR 160</code>)</p>
+<p><strong>c</strong> will not work for some Unicode characters (<code>⎕DR 160</code> and <code>320</code>)</p>
 
 <pre><code>      {(1+80=⎕DR ⍵)⊃⍵(⊂⍵)} 'İstanbul'
 İstanbul</code></pre>
@@ -15102,7 +15102,6 @@ This code is problematic. What issues can you spot?</p>
 <li>Filtering may be improved by pre-computing numeric "IDs", but lookup still required</li>
 <li>Lookup may be improved by using inverted tables</li>
 <li>Ultimately a storage / database issue</li>
-<li>Admittedly this problem is more a "quick analysis" than suited to industrial-strength processing</li>
 </ul>
 
 </div>
@@ -15152,8 +15151,6 @@ This code is problematic. What issues can you spot?</p>
 <li>Modular approach / code re-use</li>
 <li>Directly compute quarter intervals</li>
 </ul>
-<p><strong>Exercise 1:</strong> Given <code>ppm←PaymentPerMonth states</code>, how can we compute <code>ppq←PaymentPerQuarter</code>?</p>
-<p><strong>Exercise 2:</strong> Given numeric months <code>1...12</code>, return corresponding quarters <code>1...4</code></p>
 
 </div>
 </div>
@@ -15165,7 +15162,7 @@ This code is problematic. What issues can you spot?</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>For <em>Exercise 1</em>:</p>
+<p><strong>Exercise 1:</strong> Given <code>ppm←PaymentPerMonth states</code>, how can we compute <code>ppq←PaymentPerQuarter</code>?</p>
 <div class="highlight"><pre><span></span><span class="nv">ppm</span><span class="kd">←</span><span class="nv">PaymentPerMonth</span><span class="w"> </span><span class="s1">&#39;SP&#39;</span><span class="w"> </span><span class="s1">&#39;RJ&#39;</span>
 <span class="w">      </span><span class="kt">{</span><span class="o">+</span><span class="na">/¨</span><span class="p">(</span><span class="m">3</span><span class="na">/</span><span class="o">⍳</span><span class="m">4</span><span class="p">)</span><span class="o">⊆</span><span class="bp">⍵</span><span class="kt">}</span><span class="nv">ppm</span>
 <span class="m">264219.36</span><span class="w"> </span><span class="m">504658.15</span><span class="w"> </span><span class="m">641944.62</span><span class="w"> </span><span class="m">932013.08</span>
@@ -15185,7 +15182,7 @@ This code is problematic. What issues can you spot?</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>For <em>Exercise 2:</em></p>
+<p><strong>Exercise 2:</strong> Given numeric months <code>1...12</code>, return corresponding quarters <code>1...4</code></p>
 
 <pre><code>      months←?10⍴12
 
@@ -15198,18 +15195,6 @@ This code is problematic. What issues can you spot?</p>
 
       ⌈3÷⍨months
 3 2 1 4 1 1 4 3 1 2</code></pre>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput  celltag_remove_cell" data-mime-type="text/markdown">
-<p><strong>Correction:</strong> note about result orientation (transpose) of <code>ppm/ppq</code>.</p>
 
 </div>
 </div>
@@ -15239,10 +15224,12 @@ This code is problematic. What issues can you spot?</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="nv">PaymentsBetween</span><span class="kd">←</span><span class="kt">{</span>
 <span class="w">     </span><span class="nv">dt</span><span class="kd">←</span><span class="m">¯1</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nf">⎕DT</span><span class="w"> </span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="bp">⍵</span>
-<span class="w">     </span><span class="nv">ddn</span><span class="kd">←</span><span class="m">¯1</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nf">⎕DT</span><span class="w"> </span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="nv">data</span><span class="sr">[;</span><span class="nv">cols</span><span class="o">⍳⊂</span><span class="s1">&#39;timestamp&#39;</span><span class="sr">]</span>
+<span class="w">     </span><span class="nv">ddn</span><span class="kd">←</span><span class="m">¯1</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nf">⎕DT</span><span class="w"> </span><span class="nv">Timestamp2TS</span><span class="w"> </span><span class="nv">data</span><span class="sr">[;</span><span class="nv">header</span><span class="o">⍳⊂</span><span class="s1">&#39;timestamp&#39;</span><span class="sr">]</span>
+<span class="c1">⍝ Note: do not need ⎕DT due to TAO</span>
+<span class="c1">⍝       intervals ← ⍵⍸data[;header⍳⊂&#39;timestamp&#39;]</span>
 <span class="w">     </span><span class="nv">intervals</span><span class="kd">←</span><span class="nv">dt</span><span class="o">⍸</span><span class="nv">ddn</span>
-<span class="w">     </span><span class="p">(</span><span class="nv">int</span><span class="w"> </span><span class="nv">tot</span><span class="p">)</span><span class="kd">←</span><span class="o">↓⍉</span><span class="nv">intervals</span><span class="kt">{</span><span class="bp">⍺</span><span class="o">,+</span><span class="na">/</span><span class="bp">⍵</span><span class="kt">}</span><span class="na">⌸</span><span class="nv">data</span><span class="sr">[;</span><span class="nv">cols</span><span class="o">⍳⊂</span><span class="s1">&#39;payment&#39;</span><span class="sr">]</span>
-<span class="w">     </span><span class="nv">tot</span><span class="sr">[</span><span class="nv">int</span><span class="o">⍳⍳</span><span class="m">¯1</span><span class="o">+≢</span><span class="nv">dt</span><span class="sr">]</span>
+<span class="w">     </span><span class="p">(</span><span class="nv">int</span><span class="w"> </span><span class="nv">tot</span><span class="p">)</span><span class="kd">←</span><span class="o">↓⍉</span><span class="nv">intervals</span><span class="kt">{</span><span class="bp">⍺</span><span class="o">,+</span><span class="na">/</span><span class="bp">⍵</span><span class="kt">}</span><span class="na">⌸</span><span class="nv">data</span><span class="sr">[;</span><span class="nv">header</span><span class="o">⍳⊂</span><span class="s1">&#39;payment&#39;</span><span class="sr">]</span>
+<span class="w">     </span><span class="p">(</span><span class="nv">tot</span><span class="o">,</span><span class="m">0</span><span class="p">)</span><span class="sr">[</span><span class="nv">int</span><span class="o">⍳⍳</span><span class="m">¯1</span><span class="o">+≢</span><span class="nv">dt</span><span class="sr">]</span>
 <span class="w"> </span><span class="kt">}</span>
 </pre></div>
 
@@ -15320,19 +15307,19 @@ This code is problematic. What issues can you spot?</p>
       ppm←PaymentPerMonth states
 
       ⍉((⊂''),months)⍪states,ppm
-             SP         RJ        PI       MT
- Jan   43103.53   13139.53   1922.78  1453.98
- Feb   80348.6    33197.29   3583.36  3298.4
- Mar  140767.23   59495.67   2702.55  2582.92
- Apr  130989.25   61960.3    3912.86  2288.91
- May  188394.13   75293.52   7560.36  6679.58
- Jun  185274.77   59246.08   4788.16  2626.96
- Jul  197902.88   84167.86  11235.49  2938.77
- Aug  212931.9    85555.98   6939.29  5072.72
- Sep  231109.84  104566.94   8101.66  3242.68
- Oct  239321.27  108026.61  12828.51  4544.47
- Nov  391137.77  166838.56  13144.66  3745.39
- Dec  301554.04  124615.01  10432.55  3482</code></pre>
+             SP         RJ       PI        MT
+ Jan   43103.53   13139.53  1453.98   1922.78
+ Feb   80348.6    33197.29  3298.4    3583.36
+ Mar  140767.23   59495.67  2582.92   2702.55
+ Apr  130989.25   61960.3   2288.91   3912.86
+ May  188394.13   75293.52  6679.58   7560.36
+ Jun  185274.77   59246.08  2626.96   4788.16
+ Jul  197902.88   84167.86  2938.77  11235.49
+ Aug  212931.9    85555.98  5072.72   6939.29
+ Sep  231109.84  104566.94  3242.68   8101.66
+ Oct  239321.27  108026.61  4544.47  12828.51
+ Nov  391137.77  166838.56  3745.39  13144.66
+ Dec  301554.04  124615.01  3482     10432.55</code></pre>
 
 </div>
 </div>
@@ -15380,6 +15367,72 @@ This code is problematic. What issues can you spot?</p>
 <span class="w">     </span><span class="p">(</span><span class="nv">dict</span><span class="o">,</span><span class="nv">month</span><span class="p">)</span><span class="kt">{</span><span class="o">+</span><span class="na">/</span><span class="bp">⍵</span><span class="kt">}</span><span class="na">⌸</span><span class="p">((</span><span class="o">≢</span><span class="nv">dict</span><span class="p">)</span><span class="o">⍴</span><span class="m">0</span><span class="p">)</span><span class="o">,</span><span class="nv">Get</span><span class="s1">&#39;payment&#39;</span>
 <span class="w"> </span><span class="kt">}</span>
 </pre></div>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Example solutions:</p>
+
+<pre><code> PaymentPerMonthM1A←{
+     (data header)←col_spec ReadOrderData DATA_FILE
+     Get←{data[;header⍳⊆⍵]}
+     data⌿⍨←(Get'state')∊⍵
+     Timestamp2TS←{2⊃¨': -'∘⎕VFI¨⊆⍵}
+     (year month)←{(⊃¨⍵)(2⊃¨⍵)}Timestamp2TS Get'timestamp'
+     (data year month)⌿⍨←⊂year∊2017
+     dict←⍳12
+     (s m p)←↓⍉(Get'state'){⍺,↓⍉⍵[;1]{⍺,+/⍵}⌸⍵[;2]}⌸month,⍪Get'payment'
+     i←⊃,/(⍵⍳s),¨¨m
+     (∊p)@i⊢(≢⍵)12⍴0
+     ⍝ r←(≢⍵)12⍴0 ⋄ r[i]←∊p
+ }</code></pre>
+
+<pre><code>  PaymentPerMonthM1B1←{
+     (data header)←##.(col_spec ReadOrderData DATA_FILE)
+     Get←{data[;header⍳⊆⍵]}
+     data⌿⍨←(Get'state')∊⍵
+     Timestamp2TS←{2⊃¨': -'∘⎕VFI¨⊆⍵}
+     (year month)←{(⊃¨⍵)(2⊃¨⍵)}Timestamp2TS Get'timestamp'
+     (data year month)⌿⍨←⊂year∊2017
+     dict←⍳12
+     (s by_state)←↓⍉(Get'state'){⍺,⊂⍵}⌸month,⍪Get'payment'
+     (m p)←↓⍉↑↓∘⍉¨(⊣/{⍺,+/⍵}⌸⊢/)¨by_state
+     i←⊃,/(⍵⍳s),¨¨m
+     svm←(≢⍵)12⍴0
+     svm[i]←∊p
+     svm
+ }</code></pre>
+
+<pre><code>  PaymentPerMonthM1B2←{
+     (data header)←col_spec ReadOrderData DATA_FILE
+     Get←{data[;header⍳⊆⍵]}
+     data⌿⍨←(Get'state')∊⍵
+     Timestamp2TS←{2⊃¨': -'∘⎕VFI¨⊆⍵}
+     (year month)←{(⊃¨⍵)(2⊃¨⍵)}Timestamp2TS Get'timestamp'
+     (data year month)⌿⍨←⊂year∊2017
+     dict←⍳12
+     by_state←(⍵,Get'state'){⊂⍵}⌸((≢⍵)2⍴1 0)⍪month,⍪Get'payment'
+     ↑{(dict,⍵[;1]){+/⍵}⌸((≢dict)⍴0),⍵[;2]}¨by_state
+ }</code></pre>
+
+<pre><code>  PaymentPerMonthM2←{
+     (data header)←##.(col_spec ReadOrderData DATA_FILE)
+     Get←{data[;header⍳⊆⍵]}
+     data⌿⍨←(Get'state')∊⍵
+     Timestamp2TS←{2⊃¨': -'∘⎕VFI¨⊆⍵}
+     (year month)←{(⊃¨⍵)(2⊃¨⍵)}Timestamp2TS Get'timestamp'
+     (data year month)⌿⍨←⊂year∊2017
+     dict←,⍵∘.,⍳12
+     pay←(dict,(Get'state'),¨month){+/⍵}⌸((≢dict)⍴0),Get'payment'
+     (≢⍵)12⍴pay
+ }</code></pre>
 
 </div>
 </div>
@@ -15449,6 +15502,80 @@ December.</p>
 <li>Decide how to have the correct result order - prepend with a dictionary or using a lookup?</li>
 <li>Complete the <code>PaymentPerMonthBatch</code> function.</li>
 </ol>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><strong>Example solution:</strong></p>
+<div class="highlight"><pre><span></span><span class="nv">svm</span><span class="kd">←</span><span class="nv">PaymentPerMonthBatch</span><span class="w"> </span><span class="nv">states</span><span class="sr">;</span><span class="nv">Get</span><span class="sr">;</span><span class="nv">dict</span><span class="sr">;</span><span class="nv">month</span><span class="sr">;</span><span class="nv">payment</span><span class="sr">;</span><span class="nv">state</span><span class="sr">;</span><span class="nv">year</span>
+<span class="c1">⍝svm←payments: ↓states vs →months</span>
+<span class="w"> </span><span class="sr">;</span><span class="nv">LoadBatch</span><span class="sr">;</span><span class="nv">LoadHeader</span><span class="sr">;</span><span class="nv">batch</span><span class="sr">;</span><span class="nv">col_spec</span><span class="sr">;</span><span class="nv">col_types</span><span class="sr">;</span><span class="nv">header</span><span class="sr">;</span><span class="nv">tn</span><span class="sr">;</span><span class="nv">Timestamp2YM</span>
+
+<span class="w"> </span><span class="nv">LoadHeader</span><span class="kd">←</span><span class="kt">{</span><span class="o">⊃⌽</span><span class="p">(</span><span class="nf">⎕CSV</span><span class="w"> </span><span class="nf">⎕OPT</span><span class="s1">&#39;Records&#39;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="bp">⍵</span><span class="w"> </span><span class="no">⍬</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span><span class="kt">}</span>
+<span class="w"> </span><span class="nv">LoadBatch</span><span class="kd">←</span><span class="kt">{</span><span class="p">(</span><span class="nf">⎕CSV</span><span class="w"> </span><span class="nf">⎕OPT</span><span class="s1">&#39;Records&#39;</span><span class="w"> </span><span class="m">1000</span><span class="p">)</span><span class="bp">⍵</span><span class="w"> </span><span class="no">⍬</span><span class="w"> </span><span class="bp">⍺</span><span class="kt">}</span>
+<span class="w"> </span><span class="nv">Timestamp2YM</span><span class="kd">←</span><span class="kt">{</span><span class="o">↓⍉↑</span><span class="m">2</span><span class="o">↑</span><span class="na">¨</span><span class="m">2</span><span class="o">⊃</span><span class="na">¨</span><span class="s1">&#39;- :&#39;</span><span class="na">∘</span><span class="nf">⎕VFI</span><span class="na">¨</span><span class="bp">⍵</span><span class="kt">}</span>
+
+<span class="w"> </span><span class="nv">col_spec</span><span class="kd">←</span><span class="o">⍪</span><span class="s1">&#39;payment&#39;</span><span class="w"> </span><span class="s1">&#39;id&#39;</span><span class="w"> </span><span class="s1">&#39;city&#39;</span><span class="w"> </span><span class="s1">&#39;state&#39;</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="w"> </span><span class="s1">&#39;timestamp&#39;</span>
+<span class="w"> </span><span class="nv">col_spec</span><span class="o">,</span><span class="kd">←</span><span class="m">2</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span>
+
+<span class="w"> </span><span class="nv">tn</span><span class="kd">←</span><span class="s1">&#39;C:\g\2023-KeyWorkshop\order_data.csv&#39;</span><span class="nf">⎕NTIE</span><span class="w"> </span><span class="m">0</span>
+
+<span class="w"> </span><span class="nv">header</span><span class="kd">←</span><span class="nv">LoadHeader</span><span class="w"> </span><span class="nv">tn</span>
+<span class="w"> </span><span class="nv">col_types</span><span class="kd">←</span><span class="p">(</span><span class="nv">col_spec</span><span class="sr">[;</span><span class="m">2</span><span class="sr">]</span><span class="o">,</span><span class="m">1</span><span class="p">)</span><span class="sr">[</span><span class="nv">col_spec</span><span class="sr">[;</span><span class="m">1</span><span class="sr">]</span><span class="o">⍳</span><span class="nv">header</span><span class="sr">]</span>
+<span class="w"> </span><span class="c1">⍝⍝⍝ Your code here ↓↓↓</span>
+<span class="w"> </span><span class="nv">Get</span><span class="kd">←</span><span class="kt">{</span><span class="nv">batch</span><span class="sr">[;</span><span class="nv">header</span><span class="o">⍳⊆</span><span class="bp">⍵</span><span class="sr">]</span><span class="kt">}</span>
+<span class="w"> </span><span class="nv">svm</span><span class="kd">←</span><span class="p">(</span><span class="m">12</span><span class="o">×≢</span><span class="nv">states</span><span class="p">)</span><span class="o">⍴</span><span class="m">0</span>
+<span class="w"> </span><span class="nv">dict</span><span class="kd">←</span><span class="o">,</span><span class="nv">states</span><span class="na">∘.</span><span class="o">,⍳</span><span class="m">12</span>
+<span class="w"> </span><span class="bp">:</span><span class="nv">While</span><span class="w"> </span><span class="m">0</span><span class="o">&lt;≢</span><span class="nv">batch</span><span class="kd">←</span><span class="nv">col_types</span><span class="w"> </span><span class="nv">LoadBatch</span><span class="w"> </span><span class="nv">tn</span>
+<span class="w">     </span><span class="p">(</span><span class="nv">year</span><span class="w"> </span><span class="nv">month</span><span class="p">)</span><span class="kd">←</span><span class="nv">Timestamp2YM</span><span class="w"> </span><span class="nv">Get</span><span class="s1">&#39;timestamp&#39;</span>
+<span class="w">     </span><span class="nv">payment</span><span class="kd">←</span><span class="nv">Get</span><span class="s1">&#39;payment&#39;</span><span class="w"> </span><span class="p">⋄</span><span class="w"> </span><span class="nv">state</span><span class="kd">←</span><span class="nv">Get</span><span class="s1">&#39;state&#39;</span>
+<span class="w">     </span><span class="p">(</span><span class="nv">payment</span><span class="w"> </span><span class="nv">month</span><span class="w"> </span><span class="nv">state</span><span class="p">)</span><span class="na">⌿⍨</span><span class="kd">←</span><span class="o">⊂</span><span class="p">(</span><span class="nv">state</span><span class="o">∊</span><span class="nv">states</span><span class="p">)</span><span class="o">∧</span><span class="nv">year</span><span class="o">=</span><span class="m">2017</span>
+<span class="w">     </span><span class="nv">svm</span><span class="o">+</span><span class="kd">←</span><span class="p">(</span><span class="nv">dict</span><span class="o">,</span><span class="nv">state</span><span class="o">,</span><span class="na">¨</span><span class="nv">month</span><span class="p">)</span><span class="kt">{</span><span class="o">+</span><span class="na">/</span><span class="bp">⍵</span><span class="kt">}</span><span class="na">⌸</span><span class="p">((</span><span class="o">≢</span><span class="nv">dict</span><span class="p">)</span><span class="o">⍴</span><span class="m">0</span><span class="p">)</span><span class="o">,</span><span class="nv">payment</span>
+<span class="w"> </span><span class="bp">:</span><span class="nv">EndWhile</span>
+<span class="w"> </span><span class="nv">svm</span><span class="o">⍴</span><span class="na">⍨</span><span class="kd">←</span><span class="p">(</span><span class="o">≢</span><span class="nv">states</span><span class="p">)</span><span class="m">12</span>
+<span class="w"> </span><span class="c1">⍝⍝⍝ Your code here ↑↑↑</span>
+<span class="w"> </span><span class="nf">⎕NUNTIE</span><span class="w"> </span><span class="nv">tn</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<hr>
+<h2 id="Proposal-for-extension-to-key-%E2%8C%B8">Proposal for extension to key <code>&#9016;</code><a class="anchor-link" href="#Proposal-for-extension-to-key-%E2%8C%B8">&#182;</a></h2><p>As you will have noticed, using the key operator often requires extra consideration to account for the desired order of results and possible missing values.</p>
+<p>In the monadic case, we can use a dictionary left operand, ensuring to filter out non-members in our data (<code>⍵∩⍺⍺</code>):</p>
+
+<pre><code>      ⎕A{1↓¨{⊂⍵}⌸⍺⍺,⍵∩⍺⍺}'ABRACADABRA!!!'
+┌──────────────┬─────┬──┬──┬┬┬┬┬┬┬┬┬┬┬┬┬┬─────┬┬┬┬┬┬┬┬┐
+│27 30 32 34 37│28 35│31│33││││││││││││││29 36│││││││││
+└──────────────┴─────┴──┴──┴┴┴┴┴┴┴┴┴┴┴┴┴┴─────┴┴┴┴┴┴┴┴┘
+      ≢¨⎕A{1↓¨{⊂⍵}⌸⍺⍺,⍵∩⍺⍺}'ABRACADABRA!!!'
+5 2 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0</code></pre>
+<p>In the dyadic case, we can create a mask to filter our keys and values:</p>
+
+<pre><code>      keys←'11222114443333'
+      dict←'13'
+      _K←{mask←⍺∊⍺⍺ ⋄ 1↓¨(⍺⍺,mask/⍺){⊂⍵}⌸⍺⍺,mask/⍵}
+      _K←{1↓¨⍺{⊂⍵}⌸⍥(⍺⍺,(⍺∊⍺⍺)∘/)⍵}   ⍝ compact version
+      vals←'ABRACADABRA!!!'
+      keys(dict _K)vals
+┌────┬────┐
+│ABAD│A!!!│
+└────┴────┘</code></pre>
+<p>A more general version is available from <a href="https://github.com/abrudz/dyalog_vision/blob/main/QuadEqual.aplo">github.com/abrudz/dyalog_vision/blob/main/QuadEqual.aplo</a>.</p>
 
 </div>
 </div>
@@ -15610,6 +15737,7 @@ UVWX</code></pre>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><strong>Exercise:</strong></p>
 <p>Modify <code>PaymentPerMonthBatch</code> to use inverted tables instead of nested matrices.</p>
+<p><strong>Note:</strong> Inverted-table versions of some primitives can be found <a href="https://aplcart.info/?q=inverted%20table">on APLCart</a>.</p>
 
 </div>
 </div>
